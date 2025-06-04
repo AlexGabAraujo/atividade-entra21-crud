@@ -17,7 +17,7 @@ namespace MyFirstCRUD
 
             do
             {
-                Console.WriteLine("-- Cadastro de Especialidade --");
+                Console.WriteLine("-- Escolha o a Tabela em que você deseja  --");
                 Console.WriteLine("C - CREATE");
                 Console.WriteLine("R - READ");
                 Console.WriteLine("U - UPDATE");
@@ -48,6 +48,42 @@ namespace MyFirstCRUD
             } while (op != 'S');
         }
 
+        static async Task CRUDEspecialidade()
+        {
+            char op = '0';
+
+            do
+            {
+                Console.WriteLine("-- Cadastro de Especialidade --");
+                Console.WriteLine("C - CREATE");
+                Console.WriteLine("R - READ");
+                Console.WriteLine("U - UPDATE");
+                Console.WriteLine("D - DELETE\n");
+                Console.WriteLine("S - SAIR");
+
+                op = Console.ReadLine().ToUpper()[0];
+
+                switch (op)
+                {
+                    case 'C':
+                        await Create();
+                        break;
+                    case 'R':
+                        await Read();
+                        break;
+                    case 'U':
+                        await Update();
+                        break;
+                    case 'D':
+                        await Delete();
+                        break;
+                }
+
+                Console.WriteLine("Pressione 'Enter' para continuar.");
+                Console.ReadLine();
+                Console.Clear();
+            } while (op != 'S');
+        }
         static async Task Read()
         {
             IEspecialidadeRepository especialidadeRepository = new EspecialidadeRepository();
