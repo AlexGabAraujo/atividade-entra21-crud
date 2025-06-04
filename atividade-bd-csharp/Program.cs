@@ -1,4 +1,7 @@
 ﻿using System.Threading.Tasks;
+using atividade_bd_csharp.Contracts.Repository;
+using atividade_bd_csharp.Entity;
+using atividade_bd_csharp.Repository;
 using Dapper;
 using MyFirstCRUD.Contracts.Repository;
 using MyFirstCRUD.DTO;
@@ -17,35 +20,34 @@ namespace MyFirstCRUD
 
             do
             {
-                Console.WriteLine("-- Escolha o a Tabela em que você deseja  --");
-                Console.WriteLine("C - CREATE");
-                Console.WriteLine("R - READ");
-                Console.WriteLine("U - UPDATE");
-                Console.WriteLine("D - DELETE\n");
-                Console.WriteLine("S - SAIR");
+                Console.WriteLine("""
+                ----------------- MENU ------------------
+                --TABELAS: 
+                1 - Especialidade
+                2 - Aviao
+                0 - Sair
+
+                Escolha qual tabela você deseja editar: 
+                """);
 
                 op = Console.ReadLine().ToUpper()[0];
 
+                Console.Clear();
+
                 switch (op)
                 {
-                    case 'C':
-                        await Create();
+                    case '1':
+                        await CRUDEspecialidade();
                         break;
-                    case 'R':
+                    case '2':
                         await Read();
                         break;
-                    case 'U':
-                        await Update();
-                        break;
-                    case 'D':
-                        await Delete();
+                    case '0':
+                        Console.WriteLine("Finalizando...");
                         break;
                 }
 
-                Console.WriteLine("Pressione 'Enter' para continuar.");
-                Console.ReadLine();
-                Console.Clear();
-            } while (op != 'S');
+            } while (op != '0');
         }
 
         static async Task CRUDEspecialidade()
@@ -54,37 +56,45 @@ namespace MyFirstCRUD
 
             do
             {
-                Console.WriteLine("-- Cadastro de Especialidade --");
-                Console.WriteLine("C - CREATE");
-                Console.WriteLine("R - READ");
-                Console.WriteLine("U - UPDATE");
-                Console.WriteLine("D - DELETE\n");
-                Console.WriteLine("S - SAIR");
+                Console.WriteLine($"""
+                    -------- Cadastro de Especialidade --------
+                    1 - Create
+                    2 - Read
+                    3 - Update
+                    4 - Delete
+                    0 - Sair
+                    
+                    Escolha uma opção:
+                    """);
+                
 
                 op = Console.ReadLine().ToUpper()[0];
 
                 switch (op)
                 {
-                    case 'C':
-                        await Create();
+                    case '1':
+                        await EspecialidadeCreate();
                         break;
-                    case 'R':
-                        await Read();
+                    case '2':
+                        await EspecialidadeRead();
                         break;
-                    case 'U':
-                        await Update();
+                    case '3':
+                        await EspecialidadeUpdate();
                         break;
-                    case 'D':
-                        await Delete();
+                    case '4':
+                        await EspecialidadeDelete();
+                        break;
+                    case '0':
                         break;
                 }
 
                 Console.WriteLine("Pressione 'Enter' para continuar.");
                 Console.ReadLine();
                 Console.Clear();
-            } while (op != 'S');
+            } while (op != '0');
         }
-        static async Task Read()
+
+        static async Task EspecialidadeRead()
         {
             IEspecialidadeRepository especialidadeRepository = new EspecialidadeRepository();
             IEnumerable<EspecialidadeEntity> especialidadeList = await especialidadeRepository.GetAll();
@@ -96,7 +106,7 @@ namespace MyFirstCRUD
 
         }
 
-        static async Task Create()
+        static async Task EspecialidadeCreate()
         {
             EspecialidadeInsertDTO especialidade = new EspecialidadeInsertDTO();
 
@@ -108,9 +118,9 @@ namespace MyFirstCRUD
             Console.WriteLine("Especialidade cadastrada com sucesso.");
         }
 
-        static async Task Delete()
+        static async Task EspecialidadeDelete()
         {
-            await Read();
+            await EspecialidadeRead();
             Console.WriteLine("Digite o Id que deseja excluir: ");
             int id = int.Parse(Console.ReadLine());
 
@@ -120,9 +130,9 @@ namespace MyFirstCRUD
             Console.WriteLine("Especialidade deletada com sucesso.");
         }
 
-        static async Task Update()
+        static async Task EspecialidadeUpdate()
         {
-            await Read();
+            await EspecialidadeRead();
             Console.WriteLine("Digite o Id que deseja alterar: ");
             int id = int.Parse(Console.ReadLine());
             
@@ -134,6 +144,108 @@ namespace MyFirstCRUD
             if(newName != string.Empty)
             {
                 especialidade.Nome = newName;
+                await especialidadeRepository.Update(especialidade);
+                Console.WriteLine("Nome alterado com sucesso.");
+            }
+        }
+
+        /* -----------------------------     TABELA AVIAO ------------------------------ */
+
+        static async Task CRUDAviao()
+        {
+            char op = '0';
+
+            do
+            {
+                Console.WriteLine($"""
+                    -------- Cadastro de Avião --------
+                    1 - Create
+                    2 - Read
+                    3 - Update
+                    4 - Delete
+                    0 - Sair
+                    
+                    Escolha uma opção:
+                    """);
+
+
+                op = Console.ReadLine().ToUpper()[0];
+
+                switch (op)
+                {
+                    case '1':
+                        await AviaoCreate();
+                        break;
+                    case '2':
+                        await AviaoRead();
+                        break;
+                    case '3':
+                        await AviaoUpdate();
+                        break;
+                    case '4':
+                        await AviaoDelete();
+                        break;
+                    case '0':
+                        break;
+                }
+
+                Console.WriteLine("Pressione 'Enter' para continuar.");
+                Console.ReadLine();
+                Console.Clear();
+            } while (op != '0');
+        }
+
+        static async Task AviaoRead()
+        {
+            IAviaoRepository aviaoRepository = new AviaoRepository();
+            IEnumerable<AviaoEntity> aviaoList = await aviaoRepository.GetAll();
+            foreach (var aviao in aviaoList)
+            {
+                Console.WriteLine($"Id: {aviao.Id}");
+                Console.WriteLine($"Nome: {aviao.Nome}\n");
+            }
+
+        }
+
+        static async Task EspecialidadeCreate()
+        {
+            EspecialidadeInsertDTO especialidade = new EspecialidadeInsertDTO();
+
+            Console.WriteLine("Digite o nome da Especialidade: ");
+            especialidade.Nome = Console.ReadLine();
+
+            IEspecialidadeRepository especialidadeRepository = new EspecialidadeRepository();
+            await especialidadeRepository.Insert(especialidade);
+            Console.WriteLine("Especialidade cadastrada com sucesso.");
+        }
+
+        static async Task EspecialidadeDelete()
+        {
+            await EspecialidadeRead();
+            Console.WriteLine("Digite o Id que deseja excluir: ");
+            int id = int.Parse(Console.ReadLine());
+
+            IEspecialidadeRepository especialidadeRepository = new EspecialidadeRepository();
+            await especialidadeRepository.Delete(id);
+
+            Console.WriteLine("Especialidade deletada com sucesso.");
+        }
+
+        static async Task EspecialidadeUpdate()
+        {
+            await EspecialidadeRead();
+            Console.WriteLine("Digite o Id que deseja alterar: ");
+            int id = int.Parse(Console.ReadLine());
+
+            IEspecialidadeRepository especialidadeRepository = new EspecialidadeRepository();
+            EspecialidadeEntity especialidade = await especialidadeRepository.GetById(id);
+            Console.WriteLine($"Digite um novo nome para {especialidade.Nome} ou aperte 'Enter' para manter: ");
+
+            string newName = Console.ReadLine();
+            if (newName != string.Empty)
+            {
+                especialidade.Nome = newName;
+                await especialidadeRepository.Update(especialidade);
                 Console.WriteLine("Nome alterado com sucesso.");
             }
         }

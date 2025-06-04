@@ -75,12 +75,16 @@ namespace atividade_bd_csharp.Repository
             }
         }
 
-        public async Task Update(AviaoEntity aviao, string coluna)
+        public async Task Update(AviaoEntity aviao)
         {
             Connection _connection = new Connection();
             string sql = $@"UPDATE AVIAO
-                              SET {coluna} = @{coluna}
-                              WHERE ID = @Id
+                                SET QUANTIDADEVAGA = @QuantidadeVaga,
+                                CodigoRegistro = @CodigoRegistro,
+                                COMPANHIA = @Companhia, 
+                                MODELO = @Modelo,
+                                FABRICANTE = @Fabricante
+                                WHERE ID = @Id
             ";
 
             await _connection.Execute(sql, aviao);

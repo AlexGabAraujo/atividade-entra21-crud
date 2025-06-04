@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using atividade_bd_csharp.DTO;
 using atividade_bd_csharp.Entity;
 using MyFirstCRUD.DTO;
 using MyFirstCRUD.entity;
@@ -15,7 +16,7 @@ namespace atividade_bd_csharp.Contracts.Repository
 
         Task<AviaoEntity> GetById(int id);
 
-        Task Insert(AviaoEntity aviao);
+        Task Insert(AviaoInsertDTO aviao);
 
         Task Delete(int id);
 
