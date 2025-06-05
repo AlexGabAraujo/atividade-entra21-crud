@@ -23,10 +23,10 @@ namespace atividade_bd_csharp.Repository
             {
                 string sql = $@"
                     SELECT ID AS {nameof(AviaoEntity.Id)},
-                           QUANTIDADEVAGA AS {nameof(AviaoEntity.QuantidadeVaga)}
-                           CODIGOREGISTRO AS {nameof(AviaoEntity.CodigoRegistro)}
-                           COMPANHIA AS {nameof(AviaoEntity.Companhia)}
-                           MODELO AS {nameof(AviaoEntity.Modelo)}
+                           QUANTIDADEVAGA AS {nameof(AviaoEntity.QuantidadeVaga)},
+                           CODIGOREGISTRO AS {nameof(AviaoEntity.CodigoRegistro)},
+                           COMPANHIA AS {nameof(AviaoEntity.Companhia)},
+                           MODELO AS {nameof(AviaoEntity.Modelo)},
                            FABRICANTE AS {nameof(AviaoEntity.Fabricante)}
                       FROM AVIAO
                 ";
@@ -62,10 +62,10 @@ namespace atividade_bd_csharp.Repository
             {
                 string sql = $@"
                     SELECT ID AS {nameof(AviaoEntity.Id)},
-                           QUANTIDADEVAGA AS {nameof(AviaoEntity.QuantidadeVaga)}
-                           CODIGOREGISTRO AS {nameof(AviaoEntity.CodigoRegistro)}
-                           COMPANHIA AS {nameof(AviaoEntity.Companhia)}
-                           MODELO AS {nameof(AviaoEntity.Modelo)}
+                           QUANTIDADEVAGA AS {nameof(AviaoEntity.QuantidadeVaga)},
+                           CODIGOREGISTRO AS {nameof(AviaoEntity.CodigoRegistro)},
+                           COMPANHIA AS {nameof(AviaoEntity.Companhia)},
+                           MODELO AS {nameof(AviaoEntity.Modelo)},
                            FABRICANTE AS {nameof(AviaoEntity.Fabricante)}
                       FROM AVIAO WHERE ID = @Id
                 ";
