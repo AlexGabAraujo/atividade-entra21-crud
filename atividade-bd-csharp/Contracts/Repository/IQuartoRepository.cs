@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace atividade_bd_csharp.Contracts.Repository
 {
-    interface IQuarto
+    interface IQuartoRepository
     {
     }
 }

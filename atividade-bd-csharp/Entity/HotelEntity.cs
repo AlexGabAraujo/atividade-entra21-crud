@@ -9,14 +9,31 @@ namespace atividade_bd_csharp.Entity
     public class HotelEntity
     {
         public int Id { get; set; }
-        public string Numero { get; set; }
-        public string Andar { get; set; }
-        public bool AceitaAnimal { get; set; }
-        public string Obs { get; set; }
-        public decimal Preco { get; set; }
-        public string Endereco { get; set; }
-        public int LimitePessoas { get; set; }
-        public int CidadeIdEnum { get; set; }
+        public string CPF { get; set; }
+        public string Nome { get; set; }
+        public string Email { get; set; }
+        public string Telefone { get; set; }
+        public string EnderecoFoto { get; set; }
+        public string Site { get; set; }
+        public string Acessibilidade { get; set; }
+        public string CEP { get; set; }
+        public string Bairro { get; set; }
+        public string Rua { get; set; }
+        public string NumeroEndereco { get; set; }
+        public string Cidade_Id { get; set; }
+        public int HotelId { get; set; }
+
+        public StatusTipo Tipo { get; set; }
+
+        public enum StatusTipo
+        {
+            Hotel,
+            Apartamento,
+            Casa,
+            Hostel,
+            Pousada
+        }
+
 
     }
 }

@@ -10,21 +10,39 @@ using MySql.Data.MySqlClient;
 namespace MyFirstCRUD.infrastructure
 {
     public class Connection
+
     {
-        protected string connectionString = "Server=localhost;Database=healthgo;User=root;Password=root;";
+        public readonly string connectionString;
+
+        public Connection() 
+        {
+            connectionString = "Server=localhost;Database=healthgo;User=root;Password=root;"; 
+        }
 
         public MySqlConnection GetConnection()
         {
-            return new MySqlConnection(connectionString);
+            var connection = new MySqlConnection(connectionString);
+            connection.Open();
+            return connection;
         }
 
-        public async Task<int> Execute(string sql, object obj)
+        public async Task Execute(string sql, object param = null)
         {
-            using(MySqlConnection con = GetConnection())
+            using (var con = GetConnection())
             {
-                return await con.ExecuteAsync(sql, obj);
+                await con.ExecuteAsync(sql, param);
             }
         }
 
+        public async Task<IEnumerable<T>> Query<T>(string sql, object param = null)
+        {
+            using (var con = GetConnection())
+            {
+                return await con.QueryAsync<T>(sql, param);
+            }
+        }
     }
+
+
+}
 }

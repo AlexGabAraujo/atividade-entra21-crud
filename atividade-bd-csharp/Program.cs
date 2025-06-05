@@ -13,10 +13,10 @@ namespace MyFirstCRUD
     {
         static async Task Main(string[] args)
         {
-            do
+            ///do
             {
 
-            }
+            ///} while ()
 
             ////
             

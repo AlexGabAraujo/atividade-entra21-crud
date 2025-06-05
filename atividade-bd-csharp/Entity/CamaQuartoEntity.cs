@@ -9,9 +9,16 @@ namespace atividade_bd_csharp.Entity
     public class CamaQuartoEntity
     {
         public int Id { get; set; }
-        public int quantidade { get; set; }
-        public string Enum { get; set; }
-        public int QuartoIdEnum { get; set; }
+        public int Quantidade { get; set; }
+        public StatusCama TipoCama { get; set; }
+        public int QuartoId { get; set; }
 
+        public enum StatusCama
+        {
+            Solteiro,
+            Casal,
+            Beliche,
+            Futon
+        }
     }
 }
