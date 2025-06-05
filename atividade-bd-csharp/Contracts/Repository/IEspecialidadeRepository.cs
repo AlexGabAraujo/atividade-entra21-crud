@@ -13,7 +13,7 @@ namespace MyFirstCRUD.Contracts.Repository
         Task<IEnumerable<EspecialidadeEntity>> GetAll();
 
         Task<EspecialidadeEntity> GetById(int id);
-
+        
         Task Insert(EspecialidadeInsertDTO especialidade);
 
         Task Delete(int id);

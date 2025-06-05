@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyFirstCRUD.entity
 {
-    class EspecialidadeEntity
+    public class EspecialidadeEntity
     {
         public int Id { get; set; }
         public string Nome {  get; set; }
