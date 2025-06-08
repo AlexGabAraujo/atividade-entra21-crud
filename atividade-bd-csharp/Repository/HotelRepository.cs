@@ -72,9 +72,7 @@ namespace atividade_bd_csharp.Repository
                 return hotellist;
             }
         }
-        //CREATE
        
-
         public async Task Update(HotelEntity hotel)
         {
             using (var con = _connection.GetConnection())

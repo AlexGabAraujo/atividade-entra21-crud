@@ -17,31 +17,32 @@ namespace atividade_bd_csharp.Repository
 {
     public class CamaQuartoRepository : ICamaQuartoRepository
     {
-            private readonly Connection _connection;
+        private readonly Connection _connection;
 
-            public CamaQuartoRepository(Connection connection)
-            {
-                _connection = connection;
-            }
+        public CamaQuartoRepository(Connection connection)
+        {
+            _connection = connection;
+        }
 
         public async Task<IEnumerable<CamaQuartoEntity>> GetAll()
         {
             try
             {
-            using var con = _connection.GetConnection();
-            string sql = @"
+                using var con = _connection.GetConnection();
+                string sql = @"
                 SELECT 
                     ID AS Id,
                     QUANTIDADE AS Quantidade,
                     TIPOCAMA AS TipoCama,
                     QUARTOID AS QuartoId
-                FROM CamaQuarto
+                FROM Cama_Quarto
                 WHERE TipoCama IN ('Solteiro', 'Casal', 'Beliche', 'Futon')
                 ORDER BY TipoCama
                 ";
-            return await con.QueryAsync<CamaQuartoEntity>(sql);
+                return await con.QueryAsync<CamaQuartoEntity>(sql);
 
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception($"Erro ao buscar todas as camas: {ex.Message}", ex);
             }
@@ -52,7 +53,7 @@ namespace atividade_bd_csharp.Repository
             using (var con = _connection.GetConnection())
             {
                 string sql = @"
-                    INSERT INTO CamaQuarto (
+                    INSERT INTO Cama_Quarto (
                         QUANTIDADE, TIPOCAMA, QUARTOID
                     ) VALUES (
                         @Quantidade, @TipoCama, @QuartoId )
@@ -75,7 +76,7 @@ namespace atividade_bd_csharp.Repository
             {
                 string sql = @"
 
-                    UPDATE CAMA_QUARTO 
+                    UPDATE Cama_Quarto 
                     SET 
                         QUANTIDADE = @Quantidade,
                         TIPOCAMA = @TipoCama,
@@ -93,6 +94,8 @@ namespace atividade_bd_csharp.Repository
 
                 await con.ExecuteAsync(sql, parametros);
             }
+
+
         }
 
         public async Task Delete(int Id)
@@ -100,14 +103,48 @@ namespace atividade_bd_csharp.Repository
             using (var con = _connection.GetConnection())
             {
                 string sql = @"
-
-                    DELETE FROM CAMAQUARTO WHERE ID = @Id
+                    DELETE FROM Cama_Quarto WHERE ID = @Id
                 ";
 
                 await con.ExecuteAsync(sql, new { Id });
             }
         }
 
+        public async Task<CamaQuartoEntity> GetById(int Id)
+        {
+            using (var con = _connection.GetConnection())
+            {
+                string sql = @"
+                    SELECT 
+                        ID AS Id,
+                        QUANTIDADE AS Quantidade,
+                        TIPOCAMA AS TipoCama,
+                        QUARTOID AS QuartoId
+                    FROM Cama_Quarto
+                    WHERE ID = @Id
+                    ";
 
+                return await con.QueryFirstOrDefaultAsync<CamaQuartoEntity>(sql, new { Id });
+            }
+        }
+
+        public async Task<IEnumerable<CamaQuartoEntity>> GetByTipoCama(params string[] tiposCama)
+        {
+            using (var con = _connection.GetConnection())
+            {
+                string sql = @"
+            SELECT 
+                ID AS Id,
+                QUANTIDADE AS Quantidade,
+                TIPOCAMA AS TipoCama,
+                QUARTOID AS QuartoId
+            FROM Cama_Quarto
+            WHERE TIPOCAMA IN @TipoCama
+            ORDER BY TIPOCAMA, ID
+            ";
+
+                return await con.QueryAsync<CamaQuartoEntity>(sql, new { TipoCama = tiposCama });
+            }
+        }
     }
 }

@@ -95,16 +95,15 @@ namespace atividade_bd_csharp.Repository
             }
         }
 
-        public async Task<IEnumerable<QuartoEntity>> GetById (int Id)
+        public async Task<QuartoEntity> GetById(int id)
         {
             using (var con = _connection.GetConnection())
             {
                 string sql = @"
                     SELECT * FROM QUARTO WHERE ID = @Id
                     ";
-                
-               return await con.QueryAsync<QuartoEntity>(sql, new { Id });
-                
+
+                return await con.QueryFirstOrDefaultAsync<QuartoEntity>(sql, new { Id = id });
             }
         }
     }

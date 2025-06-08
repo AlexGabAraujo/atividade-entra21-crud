@@ -12,7 +12,7 @@ namespace atividade_bd_csharp.Contracts.Repository
     {
         Task Insert(HotelInsertDTO hotel);
         Task<IEnumerable<HotelEntity>> GetAll();
-        Task<HotelEntity> GetById(int id);
+        Task<IEnumerable<HotelEntity>> GetByCidadeId(int cidadeId);
         Task Update(HotelEntity hotel);
         Task Delete(int id);
     }
