@@ -8,8 +8,8 @@ namespace atividade_bd_csharp.Entity
 {
     public class HotelEntity
     {
-        public int Id { get; set; }
-        public string CPF { get; set; }
+        public int Id { get; set; } 
+        public string CNPJ{ get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
         public string Telefone { get; set; }
@@ -21,8 +21,7 @@ namespace atividade_bd_csharp.Entity
         public string Rua { get; set; }
         public string NumeroEndereco { get; set; }
         public string Cidade_Id { get; set; }
-        public int HotelId { get; set; }
-
+        
         public StatusTipo Tipo { get; set; }
 
         public enum StatusTipo

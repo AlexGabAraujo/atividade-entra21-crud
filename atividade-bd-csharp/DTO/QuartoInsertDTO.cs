@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace atividade_bd_csharp.DTO
 {
-    class QuartoInsertDTO
+    public class QuartoInsertDTO
     {
         public string Numero { get; set; }
         public string Andar { get; set; }

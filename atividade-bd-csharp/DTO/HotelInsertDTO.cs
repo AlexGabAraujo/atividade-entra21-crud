@@ -7,8 +7,9 @@ using static atividade_bd_csharp.Entity.HotelEntity;
 
 namespace atividade_bd_csharp.DTO
 {
-    class HotelInsertDTO
-    {
+      public class HotelInsertDTO
+      {
+        public int Id { get; set; }
         public string CNPJ { get; set; }
         public string Nome { get; set; }
         public string Email { get; set; }
@@ -33,5 +34,5 @@ namespace atividade_bd_csharp.DTO
             Pousada
         }
 
-    }
+      }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using Dapper;
 using MyFirstCRUD.Contracts.Repository;
 using MyFirstCRUD.DTO;
@@ -13,6 +14,17 @@ namespace MyFirstCRUD
     {
         static async Task Main(string[] args)
         {
+
+            static async Task Delet()
+            {
+
+            }
+            static async Task Insert()
+            {
+
+            }
+
+
             ///do
             {
 
@@ -110,3 +122,4 @@ namespace MyFirstCRUD
         }
     }
 }
+    }

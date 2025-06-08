@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using atividade_bd_csharp.Contracts.Repository;
+using atividade_bd_csharp.DTO;
 using atividade_bd_csharp.Entity;
 using Dapper;
 using MyFirstCRUD.infrastructure;
+using ZstdSharp.Unsafe;
 
 namespace atividade_bd_csharp.Repository
 {
-    public class QuartoRepository : ICamaQuartoRepository
+    public class QuartoRepository : IQuartoRepository
     {
         private readonly Connection _connection;
 
@@ -23,32 +26,86 @@ namespace atividade_bd_csharp.Repository
         {
             using (var con = _connection.GetConnection())
             {
-                string sql = @$"
+                string sql = @"
                         SELECT
-                        HOTEL ID AS 
-                        HOTEL CNPJ AS
-                        HOTEL NOME AS 
-                        HOTEL TIPO AS
-                        HOTEL EMAIL AS
-                        HOTEL TELEFONE AS
-                        HOTEL ENDERECOFOTO AS
-                        HOTEL SITE AS
-                        HOTEL ACESSIBILIDADE AS
-                        HOTEL CEP AS
-                        HOTEL BAIRRO AS
-                        HOTEL RUA AS
-                        HOTEL NUMEROENDERECO AS
-                        HOTEL CIDADE_ID AS
-                        HOTEL NOME AS
-                        FROM Hotel
-                        LEFT JOIN CIDADE ON CIDADE_ID
-                        ORDER BY HOTEL.NOME";
+                            QUARTO.ID AS Id,
+                            QUARTO.NUMERO AS Numero,
+                            QUARTO.ANDAR AS Andar,
+                            QUARTO.ACEITAANIMAL AS AceitaAnimal,
+                            QUARTO.OBSERVACAO AS Observacao,
+                            QUARTO.PRECO AS Preco,
+                            QUARTO.ENDERECOFOTO AS EnderecoFoto,
+                            QUARTO.LIMITEPESSOA AS LimitePessoa,
+                            QUARTO.HOTEL_ID AS Hotel_id
+                        FROM QUARTO 
+                        ORDER BY QUARTO.NUMERO";
 
-                IEnumerable<HotelEntity> hotellist = await con.QueryAsync< HotelEntity > (sql);
-                return hotellist;
+                IEnumerable<QuartoEntity> quartolist = await con.QueryAsync< QuartoEntity > (sql);
+                return quartolist;
             }
-            
+        }
 
+        public async Task Insert(QuartoInsertDTO quarto)
+        {
+            using (var con = _connection.GetConnection())
+            {
+                string sql = @"
+                    INSERT INTO QUARTO (
+                        NUMERO, ANDAR, ACEITAANIMAL,
+                        OBSERVACAO, PRECO, ENDERECOFOTO,
+                        LIMITEPESSOA, HOTEL_ID
+                    ) VALUES (
+                        @Numero, @Andar, @AceitaAnimal,
+                        @Observacao, @Preco, @EnderecoFoto,
+                        @LimitePessoa, @Hotel_Id 
+                    )";
+
+                    await con.ExecuteAsync(sql, quarto);    
+            }
+        }
+
+        public async Task Update(QuartoEntity quarto)
+        {
+            using (var con = _connection.GetConnection())
+            {
+                string sql = @"
+                    UPDATE QUARTO SET
+                        NUMERO = @Numero,
+                        ANDAR = @Andar,
+                        ACEITAANIMAL = @AceitaAnimal,
+                        OBSERVACAO = @Observacao,
+                        PRECO = @Preco,
+                        ENDERECOFOTO = @EnderecoFoto,
+                        LIMITEPESSOA = @LimitePessoa,
+                        HOTEL_ID = @Hotel_Id
+                    WHERE ID = @Id
+                    ";
+                await con.ExecuteAsync (sql, quarto);
+
+            }
+        }
+
+        public async Task Delete(int Id)
+        {
+            using (var con = _connection.GetConnection())
+            {
+                string sql = @"
+                    DELETE FROM QUARTO WHERE ID = @Id";
+                await con.ExecuteAsync(sql, new { Id });
+            }
+        }
+
+        public async Task<IEnumerable<QuartoEntity>> GetById (int Id)
+        {
+            using (var con = _connection.GetConnection())
+            {
+                string sql = @"
+                    SELECT * FROM QUARTO WHERE ID = @Id
+                    ";
+                
+               return await con.QueryAsync<QuartoEntity>(sql, new { Id });
+                
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ using atividade_bd_csharp.DTO;
 using atividade_bd_csharp.Entity;
 using Dapper;
 using MyFirstCRUD.infrastructure;
+using Mysqlx.Crud;
 
 namespace atividade_bd_csharp.Repository
 {
@@ -21,64 +22,58 @@ namespace atividade_bd_csharp.Repository
         {
             _connection = connection;
         }
-        
 
-        public async Task<IEnumerable<HotelEntity>> GetAll()
-        {
-
-            using (var con = _connection.GetConnection())
-            {
-                string sql = @$"
-                        SELECT
-                        HOTEL ID AS 
-                        HOTEL CNPJ AS
-                        HOTEL NOME AS 
-                        HOTEL TIPO AS
-                        HOTEL EMAIL AS
-                        HOTEL TELEFONE AS
-                        HOTEL ENDERECOFOTO AS
-                        HOTEL SITE AS
-                        HOTEL ACESSIBILIDADE AS
-                        HOTEL CEP AS
-                        HOTEL BAIRRO AS
-                        HOTEL RUA AS
-                        HOTEL NUMEROENDERECO AS
-                        HOTEL CIDADE_ID AS
-                        HOTEL NOME AS
-                        FROM HOTEL
-                        LEFT JOIN CIDADE ON CIDADE_ID
-                        ORDER BY HOTEL.NOME";
-
-                IEnumerable<HotelEntity> hotellist = await con.QueryAsync<HotelEntity>(sql);
-                return hotellist;
-            }
-
-           
-        }
-        //CREATE
         public async Task Insert(HotelInsertDTO hotel)
         {
             using (var con = _connection.GetConnection())
             {
                 string sql = @"
-                    INSERT INTO HOTEL (
-                        CNPJ, NOME, TIPO,EMAIL,
+                    INSERT INTO HOTEL 
+                    (
+                        ID, CNPJ, NOME, TIPO ,EMAIL,
                         TELEFONE, ENDERECOFOTO, SITE,
                         ACESSIBILIDADE, CEP, BAIRRO,
-                        RUA, NUMEROENDERECO, CIDADE_ID,
-                        HOTEL_ID;
+                        RUA, NUMEROENDERECO, CIDADE_ID
                     ) VALUES (
-                        @Cnpj, @Nome, @Tipo, @Email,
-                        @Telefone, @EnderecoFoto, @site,
-                        @Acessbilidade, @Cep, @Bairro,
-                        @Rua, @NumeroEndereco, @Cidade_Id,
-                        @Hotel|_Id;)
-                        ";
+                        @Id, @Cnpj, @Nome, @Tipo, @Email,
+                        @Telefone, @EnderecoFoto, @Site,
+                        @Acessibilidade, @Cep, @Bairro,
+                        @Rua, @NumeroEndereco, @Cidade_Id
+                    )";
 
                 await con.ExecuteAsync(sql, hotel);
             }
 
         }
+        public async Task<IEnumerable<HotelEntity>> GetAll()
+        {
+            using (var con = _connection.GetConnection())
+            {
+                string sql = @"
+                        SELECT 
+                        H.ID AS  Id
+                        H.NUMERO AS Numero
+                        H.CNPJ AS Cnpj
+                        H.EMAIL AS Email
+                        H.TELEFONE AS Telefone
+                        H.ENDERECOFOTO AS EnderecoFoto
+                        H.SITE AS Site
+                        H.ACESSIBILIDADE AS Acessibilidade
+                        H.CEP AS Cep
+                        H.BAIRRO AS Bairro
+                        H.RUA AS Rua
+                        H.NUMEROENDERECO AS NumeroEndereco
+                        H.CIDADE_ID AS Cidade_Id
+                        FROM HOTEL H
+                        LEFT JOIN CIDADE C ON H.CIDADE_ID = C.ID
+                        ORDER BY H.NOME";
+
+                IEnumerable<HotelEntity> hotellist = await con.QueryAsync<HotelEntity>(sql);
+                return hotellist;
+            }
+        }
+        //CREATE
+       
 
         public async Task Update(HotelEntity hotel)
         {
@@ -86,22 +81,55 @@ namespace atividade_bd_csharp.Repository
             {
                 string sql = @"
                     UPDATE HOTEL SET
-                    CNPJ= @CNPJ
-                    NOME= @Nome
-                    TIPO= @Tipo
-                    EMAIL= @Email
-                    TELEFONE= @Telefone
-                    ENDERECOFOTO= @EnderecoFoto
-                    SITE= @Site
-                    ACESSIBILIDADE= @Acessibilidade
-                    CEP= @CEP
-                    BAIRRO= @Bairro
-                    RUA= @Rua
-                    NUMEROENDERECO= @NumeroEndereco
-                    CIDADE_ID= @Cidade_Id
+                    CNPJ= @Cnpj,
+                    NOME= @Nome,
+                    TIPO= @Tipo,
+                    EMAIL= @Email,
+                    TELEFONE= @Telefone,
+                    ENDERECOFOTO= @EnderecoFoto,
+                    SITE= @Site,
+                    ACESSIBILIDADE= @Acessibilidade,
+                    CEP= @Cep,
+                    BAIRRO= @Bairro,
+                    RUA= @Rua,
+                    NUMEROENDERECO= @NumeroEndereco,
+                    CIDADE_ID = @Cidade_Id
                     WHERE ID = @Id
                     ";
                 await con.ExecuteAsync(sql, hotel);
+            }
+
+        }
+
+        public async Task Delete(int Id)
+        {
+            using (var con = _connection.GetConnection())
+            {
+                string sql = @"DELETE FROM HOTEL WHERE ID = @Id";
+                await con.ExecuteAsync(sql, new { ID = Id });
+            }
+        }
+        
+        public async Task<IEnumerable<HotelEntity>> GetByCidadeId(int cidadeId)
+        {
+            using (var con = _connection.GetConnection())
+            {
+                string sql = @"
+                    SELECT
+                        HOTEL.Id,
+                        HOTEL.Nome,
+                        HOTEL.Email,
+                        HOTEL.Telefone,
+                        HOTEL.Site,
+                        HOTEL.Cidade_Id,
+                        HOTEL.Bairro,
+                        HOTEL.Rua
+                    FROM HOTEL 
+                    LEFT JOIN CIDADE c ON HOTEL.CIDADE_ID = c.ID
+                    WHERE HOTEL.CIDADE_ID = @cidadeId
+                    ORDER BY HOTEL.NOME";
+
+                return await con.QueryAsync<HotelEntity>(sql, new { cidadeId });
             }
         }
     }

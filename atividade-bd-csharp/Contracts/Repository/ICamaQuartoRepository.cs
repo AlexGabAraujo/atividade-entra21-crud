@@ -8,16 +8,8 @@ using MySql.Data.MySqlClient;
 
 namespace atividade_bd_csharp.Contracts.Repository
 {
-    interface ICamaQuartoRepository
+    public interface ICamaQuartoRepository
     {
-        public IEnumerable<Entity.CamaQuartoEntity> GetAll()
-        {
-            Connection _connection = new Connection();
-            using (MySqlConnection con = _connection.GetConnection())
-            {
-
-            }
-        }
 
     }
 }

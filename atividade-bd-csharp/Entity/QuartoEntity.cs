@@ -8,15 +8,15 @@ namespace atividade_bd_csharp.Entity
 {
     public class QuartoEntity
     {
-        public int Id { get; set; }
+        public int Id { get; set; }  
         public string Numero { get; set; }
         public string Andar { get; set; }
         public bool AceitaAnimal { get; set; }
-        public string Obs { get; set; }
+        public string Observacao { get; set; }
         public decimal Preco { get; set; }
-        public string Endereco { get; set; }
-        public int LimitePessoas { get; set; }
-        public int Cidade_Id { get; set; }
+        public string EnderecoFoto { get; set; }
+        public int LimitePessoa { get; set; }
+        public int Hotel_id { get; set; }
         
         
     }

@@ -5,7 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using atividade_bd_csharp.Contracts.Repository;
 using atividade_bd_csharp.Entity;
+using Dapper;
+using MyFirstCRUD.DTO;
+using MyFirstCRUD.entity;
 using MyFirstCRUD.infrastructure;
+
+
+
 
 namespace atividade_bd_csharp.Repository
 {
@@ -20,9 +26,86 @@ namespace atividade_bd_csharp.Repository
 
         public async Task<IEnumerable<CamaQuartoEntity>> GetAll()
         {
-            using var con = _connection.GetConnection();    
+            try
+            {
+            using var con = _connection.GetConnection();
+            string sql = @"
+                SELECT 
+                    ID AS Id,
+                    QUANTIDADE AS Quantidade,
+                    TIPOCAMA AS TipoCama,
+                    QUARTOID AS QuartoId
+                FROM CamaQuarto
+                WHERE TipoCama IN ('Solteiro', 'Casal', 'Beliche', 'Futon')
+                ORDER BY TipoCama
+                ";
+            return await con.QueryAsync<CamaQuartoEntity>(sql);
 
+            } catch (Exception ex)
+            {
+                throw new Exception($"Erro ao buscar todas as camas: {ex.Message}", ex);
+            }
+        }
 
+        public async Task Insert(CamaQuartoEntity camaquarto)
+        {
+            using (var con = _connection.GetConnection())
+            {
+                string sql = @"
+                    INSERT INTO CamaQuarto (
+                        QUANTIDADE, TIPOCAMA, QUARTOID
+                    ) VALUES (
+                        @Quantidade, @TipoCama, @QuartoId )
+                ";
+
+                var parametros = new
+                {
+                    camaquarto.Quantidade,
+                    TipoCama = camaquarto.TipoCama.ToString(),
+                    camaquarto.QuartoId
+                };
+
+                await con.ExecuteAsync(sql, parametros);
+            }
+        }
+
+        public async Task Update(CamaQuartoEntity camaquarto)
+        {
+            using (var con = _connection.GetConnection())
+            {
+                string sql = @"
+
+                    UPDATE CAMA_QUARTO 
+                    SET 
+                        QUANTIDADE = @Quantidade,
+                        TIPOCAMA = @TipoCama,
+                        QUARTOID = @QuartoId
+                    WHERE ID = @Id
+                ";
+
+                var parametros = new
+                {
+                    camaquarto.Id,
+                    camaquarto.Quantidade,
+                    TipoCama = camaquarto.TipoCama.ToString(),
+                    camaquarto.QuartoId
+                };
+
+                await con.ExecuteAsync(sql, parametros);
+            }
+        }
+
+        public async Task Delete(int Id)
+        {
+            using (var con = _connection.GetConnection())
+            {
+                string sql = @"
+
+                    DELETE FROM CAMAQUARTO WHERE ID = @Id
+                ";
+
+                await con.ExecuteAsync(sql, new { Id });
+            }
         }
 
 
