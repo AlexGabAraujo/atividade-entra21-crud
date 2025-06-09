@@ -39,7 +39,15 @@ namespace atividade_bd_csharp.Repository
                 WHERE TipoCama IN ('Solteiro', 'Casal', 'Beliche', 'Futon')
                 ORDER BY TipoCama
                 ";
-                return await con.QueryAsync<CamaQuartoEntity>(sql);
+                var resultado = await con.QueryAsync<dynamic>(sql);
+
+                return resultado.Select(r => new CamaQuartoEntity
+                {
+                    Id = r.Id,
+                    Quantidade = r.Quantidade,
+                    TipoCama = ConverterStringParaEnum(r.TipoCama),
+                    QuartoId = r.QuartoId
+                });
 
             }
             catch (Exception ex)
@@ -133,18 +141,30 @@ namespace atividade_bd_csharp.Repository
             using (var con = _connection.GetConnection())
             {
                 string sql = @"
-            SELECT 
-                ID AS Id,
-                QUANTIDADE AS Quantidade,
-                TIPOCAMA AS TipoCama,
-                QUARTOID AS QuartoId
-            FROM Cama_Quarto
-            WHERE TIPOCAMA IN @TipoCama
-            ORDER BY TIPOCAMA, ID
-            ";
+                    SELECT 
+                        ID AS Id,
+                        QUANTIDADE AS Quantidade,
+                        TIPOCAMA AS TipoCama,
+                        QUARTOID AS QuartoId
+                    FROM Cama_Quarto
+                    WHERE TIPOCAMA IN @TipoCama
+                    ORDER BY TIPOCAMA, ID
+                    ";
 
                 return await con.QueryAsync<CamaQuartoEntity>(sql, new { TipoCama = tiposCama });
             }
+        }
+
+        private CamaQuartoEntity.EnumCama ConverterStringParaEnum(string tipoCamaString)
+        {
+            return tipoCamaString switch
+            {
+                "Solteiro" => CamaQuartoEntity.EnumCama.Solteiro,
+                "Casal" => CamaQuartoEntity.EnumCama.Casal,
+                "Beliche" => CamaQuartoEntity.EnumCama.Beliche,
+                "Futon" => CamaQuartoEntity.EnumCama.Futon,
+                _ => CamaQuartoEntity.EnumCama.Solteiro 
+            };
         }
     }
 }

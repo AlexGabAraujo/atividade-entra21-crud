@@ -45,7 +45,7 @@ namespace atividade_bd_csharp.Repository
             }
         }
 
-        public async Task Insert(QuartoInsertDTO quarto)
+        public async Task Insert(QuartoEntity quarto)
         {
             using (var con = _connection.GetConnection())
             {
@@ -64,7 +64,7 @@ namespace atividade_bd_csharp.Repository
             }
         }
 
-        public async Task Update(QuartoEntity quarto)
+        public async Task Update(int id, QuartoEntity quarto, QuartoInsertDTO dto)
         {
             using (var con = _connection.GetConnection())
             {

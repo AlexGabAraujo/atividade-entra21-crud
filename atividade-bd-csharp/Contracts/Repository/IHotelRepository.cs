@@ -15,5 +15,6 @@ namespace atividade_bd_csharp.Contracts.Repository
         Task<IEnumerable<HotelEntity>> GetByCidadeId(int cidadeId);
         Task Update(HotelEntity hotel);
         Task Delete(int id);
+        Task<HotelEntity> GetById(int id);
     }
 }

@@ -10,15 +10,15 @@ namespace atividade_bd_csharp.Entity
     {
         public int Id { get; set; }
         public int Quantidade { get; set; }
-        public StatusCama TipoCama { get; set; }
+        public EnumCama TipoCama { get; set; }
         public int QuartoId { get; set; }
 
-        public enum StatusCama
+        public enum EnumCama
         {
-            Solteiro,
-            Casal,
-            Beliche,
-            Futon
+            Solteiro = 1,
+            Casal = 2,
+            Beliche = 3,
+            Futon = 4
         }
     }
 }

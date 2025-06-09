@@ -73,7 +73,7 @@ namespace atividade_bd_csharp.Repository
             }
         }
        
-        public async Task Update(HotelEntity hotel)
+        public async Task Update(int id, HotelEntity hotel)
         {
             using (var con = _connection.GetConnection())
             {
@@ -121,13 +121,41 @@ namespace atividade_bd_csharp.Repository
                         HOTEL.Site,
                         HOTEL.Cidade_Id,
                         HOTEL.Bairro,
-                        HOTEL.Rua
+                        HOTEL.Rua,
+                        HOTEL.Cep
                     FROM HOTEL 
                     LEFT JOIN CIDADE c ON HOTEL.CIDADE_ID = c.ID
                     WHERE HOTEL.CIDADE_ID = @cidadeId
                     ORDER BY HOTEL.NOME";
 
                 return await con.QueryAsync<HotelEntity>(sql, new { cidadeId });
+            }
+        }
+
+        public async Task<HotelEntity> GetById(int id)
+        {
+            using (var con = _connection.GetConnection())
+            {
+                string sql = @"
+            SELECT 
+                ID AS Id,
+                CNPJ AS Cnpj,
+                NOME AS Nome,
+                TIPO AS Tipo,
+                EMAIL AS Email,
+                TELEFONE AS Telefone,
+                ENDERECOFOTO AS EnderecoFoto,
+                SITE AS Site,
+                ACESSIBILIDADE AS Acessibilidade,
+                CEP AS Cep,
+                BAIRRO AS Bairro,
+                RUA AS Rua,
+                NUMEROENDERECO AS NumeroEndereco,
+                CIDADE_ID AS Cidade_Id
+            FROM HOTEL 
+            WHERE ID = @Id";
+
+                return await con.QueryFirstOrDefaultAsync<HotelEntity>(sql, new { Id = id });
             }
         }
     }
