@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MyFirstCRUD.DTO;
 using MyFirstCRUD.entity;
 
-namespace MyFirstCRUD.Contracts.Repository
+namespace atividade_bd_csharp.Contracts.Repository
 {
     interface IAeroportoRepository
     {

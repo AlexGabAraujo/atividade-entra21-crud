@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Threading.Tasks;
+using atividade_bd_csharp.Contracts.Repository;
 using Dapper;
 using Google.Protobuf.WellKnownTypes;
 using MyFirstCRUD.Contracts.Repository;
